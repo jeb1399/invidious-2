@@ -5,19 +5,20 @@
 module YoutubeAPI
   extend self
 
-  private DEFAULT_API_KEY = "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
-
   # For Android versions, see https://en.wikipedia.org/wiki/Android_version_history
-  private ANDROID_APP_VERSION = "19.09.36"
-  private ANDROID_USER_AGENT  = "com.google.android.youtube/19.09.36 (Linux; U; Android 12; US) gzip"
+  private ANDROID_APP_VERSION = "19.14.42"
+  private ANDROID_USER_AGENT  = "com.google.android.youtube/19.14.42 (Linux; U; Android 12; US) gzip"
   private ANDROID_SDK_VERSION = 31_i64
   private ANDROID_VERSION     = "12"
+
+  private ANDROID_TS_APP_VERSION = "1.9"
+  private ANDROID_TS_USER_AGENT  = "com.google.android.youtube/1.9 (Linux; U; Android 12; US) gzip"
 
   # For Apple device names, see https://gist.github.com/adamawolf/3048717
   # For iOS versions, see https://en.wikipedia.org/wiki/IOS_version_history#Releases,
   # then go to the dedicated article of the major version you want.
-  private IOS_APP_VERSION = "19.09.3"
-  private IOS_USER_AGENT  = "com.google.ios.youtube/19.09.3 (iPhone14,5; U; CPU iOS 17_4 like Mac OS X;)"
+  private IOS_APP_VERSION = "19.16.3"
+  private IOS_USER_AGENT  = "com.google.ios.youtube/19.16.3 (iPhone14,5; U; CPU iOS 17_4 like Mac OS X;)"
   private IOS_VERSION     = "17.4.0.21E219" # Major.Minor.Patch.Build
 
   private WINDOWS_VERSION = "10.0"
@@ -32,6 +33,7 @@ module YoutubeAPI
     Android
     AndroidEmbeddedPlayer
     AndroidScreenEmbed
+    AndroidTestSuite
 
     IOS
     IOSEmbedded
@@ -47,7 +49,6 @@ module YoutubeAPI
       name:       "WEB",
       name_proto: "1",
       version:    "2.20240304.00.00",
-      api_key:    DEFAULT_API_KEY,
       screen:     "WATCH_FULL_SCREEN",
       os_name:    "Windows",
       os_version: WINDOWS_VERSION,
@@ -57,7 +58,6 @@ module YoutubeAPI
       name:       "WEB_EMBEDDED_PLAYER",
       name_proto: "56",
       version:    "1.20240303.00.00",
-      api_key:    DEFAULT_API_KEY,
       screen:     "EMBED",
       os_name:    "Windows",
       os_version: WINDOWS_VERSION,
@@ -67,7 +67,6 @@ module YoutubeAPI
       name:       "MWEB",
       name_proto: "2",
       version:    "2.20240304.08.00",
-      api_key:    DEFAULT_API_KEY,
       os_name:    "Android",
       os_version: ANDROID_VERSION,
       platform:   "MOBILE",
@@ -76,7 +75,6 @@ module YoutubeAPI
       name:       "WEB",
       name_proto: "1",
       version:    "2.20240304.00.00",
-      api_key:    DEFAULT_API_KEY,
       screen:     "EMBED",
       os_name:    "Windows",
       os_version: WINDOWS_VERSION,
@@ -89,7 +87,6 @@ module YoutubeAPI
       name:                "ANDROID",
       name_proto:          "3",
       version:             ANDROID_APP_VERSION,
-      api_key:             "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w",
       android_sdk_version: ANDROID_SDK_VERSION,
       user_agent:          ANDROID_USER_AGENT,
       os_name:             "Android",
@@ -100,16 +97,24 @@ module YoutubeAPI
       name:       "ANDROID_EMBEDDED_PLAYER",
       name_proto: "55",
       version:    ANDROID_APP_VERSION,
-      api_key:    "AIzaSyCjc_pVEDi4qsv5MtC2dMXzpIaDoRFLsxw",
     },
     ClientType::AndroidScreenEmbed => {
       name:                "ANDROID",
       name_proto:          "3",
       version:             ANDROID_APP_VERSION,
-      api_key:             DEFAULT_API_KEY,
       screen:              "EMBED",
       android_sdk_version: ANDROID_SDK_VERSION,
       user_agent:          ANDROID_USER_AGENT,
+      os_name:             "Android",
+      os_version:          ANDROID_VERSION,
+      platform:            "MOBILE",
+    },
+    ClientType::AndroidTestSuite => {
+      name:                "ANDROID_TESTSUITE",
+      name_proto:          "30",
+      version:             ANDROID_TS_APP_VERSION,
+      android_sdk_version: ANDROID_SDK_VERSION,
+      user_agent:          ANDROID_TS_USER_AGENT,
       os_name:             "Android",
       os_version:          ANDROID_VERSION,
       platform:            "MOBILE",
@@ -121,7 +126,6 @@ module YoutubeAPI
       name:         "IOS",
       name_proto:   "5",
       version:      IOS_APP_VERSION,
-      api_key:      "AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc",
       user_agent:   IOS_USER_AGENT,
       device_make:  "Apple",
       device_model: "iPhone14,5",
@@ -133,7 +137,6 @@ module YoutubeAPI
       name:         "IOS_MESSAGES_EXTENSION",
       name_proto:   "66",
       version:      IOS_APP_VERSION,
-      api_key:      DEFAULT_API_KEY,
       user_agent:   IOS_USER_AGENT,
       device_make:  "Apple",
       device_model: "iPhone14,5",
@@ -145,7 +148,6 @@ module YoutubeAPI
       name:         "IOS_MUSIC",
       name_proto:   "26",
       version:      "6.42",
-      api_key:      "AIzaSyBAETezhkwP0ZWA02RsqT1zu78Fpt0bC_s",
       user_agent:   "com.google.ios.youtubemusic/6.42 (iPhone14,5; U; CPU iOS 17_4 like Mac OS X;)",
       device_make:  "Apple",
       device_model: "iPhone14,5",
@@ -160,13 +162,11 @@ module YoutubeAPI
       name:       "TVHTML5",
       name_proto: "7",
       version:    "7.20240304.10.00",
-      api_key:    DEFAULT_API_KEY,
     },
     ClientType::TvHtml5ScreenEmbed => {
       name:       "TVHTML5_SIMPLY_EMBEDDED_PLAYER",
       name_proto: "85",
       version:    "2.0",
-      api_key:    DEFAULT_API_KEY,
       screen:     "EMBED",
     },
   }
@@ -188,10 +188,6 @@ module YoutubeAPI
   # conf_2 = ClientConfig.new(client_type: ClientType::Android)
   # YoutubeAPI::player(video_id: "dQw4w9WgXcQ", client_config: conf_2)
   #
-  # # Proxy request through russian proxies
-  # conf_3 = ClientConfig.new(proxy_region: "RU")
-  # YoutubeAPI::next({video_id: "dQw4w9WgXcQ"}, client_config: conf_3)
-  # ```
   #
   struct ClientConfig
     # Type of client to emulate.
@@ -202,16 +198,11 @@ module YoutubeAPI
     # (this is passed as the `gl` parameter).
     property region : String | Nil
 
-    # ISO code of country where the proxy is located.
-    # Used in case of geo-restricted videos.
-    property proxy_region : String | Nil
-
     # Initialization function
     def initialize(
       *,
       @client_type = ClientType::Web,
-      @region = "US",
-      @proxy_region = nil
+      @region = "US"
     )
     end
 
@@ -228,11 +219,6 @@ module YoutubeAPI
     # :ditto:
     def version : String
       HARDCODED_CLIENTS[@client_type][:version]
-    end
-
-    # :ditto:
-    def api_key : String
-      HARDCODED_CLIENTS[@client_type][:api_key]
     end
 
     # :ditto:
@@ -271,9 +257,8 @@ module YoutubeAPI
     # Convert to string, for logging purposes
     def to_s
       return {
-        client_type:  self.name,
-        region:       @region,
-        proxy_region: @proxy_region,
+        client_type: self.name,
+        region:      @region,
       }.to_s
     end
   end
@@ -600,7 +585,7 @@ module YoutubeAPI
     client_config ||= DEFAULT_CLIENT_CONFIG
 
     # Query parameters
-    url = "#{endpoint}?key=#{client_config.api_key}&prettyPrint=false"
+    url = "#{endpoint}?prettyPrint=false"
 
     headers = HTTP::Headers{
       "Content-Type"              => "application/json; charset=UTF-8",
@@ -620,7 +605,7 @@ module YoutubeAPI
     LOGGER.trace("YoutubeAPI: POST data: #{data}")
 
     # Send the POST request
-    body = YT_POOL.client(client_config.proxy_region) do |client|
+    body = YT_POOL.client() do |client|
       client.post(url, headers: headers, body: data.to_json) do |response|
         self._decompress(response.body_io, response.headers["Content-Encoding"]?)
       end
